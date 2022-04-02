@@ -1,5 +1,5 @@
 from random import randint
-
+from time import sleep
 
 
 def draw_card():
@@ -29,22 +29,40 @@ def check_card_value(cards):
 computer_cards = [draw_card(), draw_card()]
 player_cards = [draw_card(), draw_card()]
 
-bet = input("Podaj wartosc zakladu: ")
+bet = int(input("Podaj wartosc zakladu: "))
 
 print("Karty dilera:", computer_cards[0])
 print("Twoje karty:", player_cards[0], player_cards[1])
 
 while True:
     if check_card_value(player_cards) == 21 and len(player_cards) == 2:
-        print("Blackjack! Wygrywasz:", str(float(bet) * 2.5))
+        print("Blackjack! Wygrywasz:", str(bet * 2.5))
+        exit()
     print("Podejmij decyzje: 1: Hit, 2: Stand")
     user_input = input()
     if user_input == "2":
         break
     if user_input == "1":
         player_cards.append(draw_card())
+    print("Twoje karty:", *player_cards)
     if check_card_value(player_cards) > 21:
         print("Bust! Przegrywasz")
-        break
-    print("Twoje karty:", *player_cards)
+        exit()
 
+while True:
+    print("Karty dilera:", *computer_cards)
+    if 15 <= check_card_value(computer_cards):
+        if check_card_value(computer_cards) > 21:
+            print("Bust dilera. Wygrales! Wygrana:", bet * 2)
+            exit()
+        if check_card_value(computer_cards) > check_card_value(player_cards):
+            print("Przegrales!")
+            exit()
+        if check_card_value(computer_cards) == check_card_value(player_cards):
+            print("Remis! Wygrana:", bet)
+            exit()
+        else:
+            print("Wygrales! Wygrana:", bet * 2)
+            exit()
+    computer_cards.append(draw_card())
+    sleep(2)
